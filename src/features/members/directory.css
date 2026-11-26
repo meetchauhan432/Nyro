@@ -1,0 +1,464 @@
+/* directory — scoped NYRO styles. */
+
+.network-overview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: linear-gradient(110deg,#fff,#f3f5fa);
+  padding: 24px;
+}
+
+.network-intro {
+  min-width: 0;
+}
+
+.network-intro h2 {
+  font-size: 25px;
+  letter-spacing: -.8px;
+  margin: 6px 0;
+  font-weight: 550;
+}
+
+.network-intro p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.network-stats {
+  display: flex;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+.network-stats>div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0 24px;
+  border-left: 1px solid #dfe4eb;
+}
+
+.network-stats b {
+  font-size: 30px;
+  letter-spacing: -1px;
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+}
+
+.network-stats span {
+  font-size: 11px;
+  color: #697587;
+  white-space: nowrap;
+}
+
+.member-directory {
+  padding: 22px;
+}
+
+.member-toolbar select {
+  font-size: 12px;
+  min-width: 112px;
+}
+
+.member-table-head,
+.member-row {
+  display: grid;
+  grid-template-columns: minmax(145px,1.6fr) minmax(65px,1fr) minmax(85px,1.1fr) minmax(58px,.65fr) minmax(65px,.75fr) 16px;
+  gap: 10px;
+  align-items: center;
+}
+
+.member-table-head {
+  font-size: 10px;
+  letter-spacing: .4px;
+  color: #697587;
+  text-transform: uppercase;
+  padding: 12px 8px;
+  border-bottom: 1px solid #e9ebef;
+}
+
+.member-row {
+  width: 100%;
+  padding: 12px 8px;
+  text-align: left;
+  border-bottom: 1px solid #edf0f2;
+  font-size: 12px;
+  transition: background .2s;
+  animation: reveal-up .32s var(--row-delay,0ms) var(--ease) both;
+}
+
+.member-row:last-child {
+  border-bottom: 0;
+}
+
+.member-row:hover {
+  background: #f6f8fc;
+  border-radius: 8px;
+}
+
+.member-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.member-avatar {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: #e8edf7;
+  color: #3853a4;
+  font-size: 11px;
+  font-weight: 650;
+  flex-shrink: 0;
+}
+
+.member-name {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.member-name b {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.member-name small {
+  color: #748094;
+  font-size: 10px;
+}
+
+.member-role,
+.member-parent {
+  color: #536078;
+  overflow-wrap: anywhere;
+}
+
+.member-status,
+.member-kyc {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  font-size: 11px;
+  color: #627088;
+}
+
+.member-status.active,
+.member-kyc.verified {
+  color: #21775d;
+}
+
+.member-kyc.pending {
+  color: #966627;
+}
+
+.member-open {
+  display: flex;
+  color: #8c9bb2;
+  transition: transform .2s;
+}
+
+.member-row:hover .member-open {
+  transform: translateX(3px);
+}
+
+.member-avatar.large {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 12px;
+  border-radius: 20px;
+  font-size: 24px;
+}
+
+@media(max-width:1200px) {
+  .network-stats>div {
+    padding: 0 12px;
+  }
+  .member-directory {
+    padding: 16px;
+  }
+  .member-table-head,
+  .member-row {
+    gap: 6px;
+  }
+  .member-identity {
+    gap: 7px;
+  }
+  .member-avatar {
+    width: 31px;
+    height: 31px;
+  }
+}
+
+@media(max-width:1020px) {
+  .network-overview {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+  .network-stats {
+    justify-content: space-between;
+  }
+  .network-stats>div {
+    flex: 1;
+    padding: 0 12px;
+  }
+  .member-table-head {
+    display: none;
+  }
+  .member-row {
+    grid-template-columns: minmax(0,1.3fr) minmax(0,1fr) 75px 16px;
+    grid-template-areas: 'identity role account arrow' 'identity parent kyc arrow';
+    gap: 5px 8px;
+  }
+  .member-identity {
+    grid-area: identity;
+  }
+  .member-role {
+    grid-area: role;
+  }
+  .member-parent {
+    grid-area: parent;
+    font-size: 10px;
+  }
+  .member-status {
+    grid-area: account;
+  }
+  .member-kyc {
+    grid-area: kyc;
+  }
+  .member-open {
+    grid-area: arrow;
+  }
+}
+
+@media(max-width:820px) {
+  .network-overview {
+    padding: 20px;
+  }
+  .network-intro h2 {
+    font-size: 21px;
+  }
+  .network-stats b {
+    font-size: 25px;
+  }
+  .member-toolbar select {
+    min-width: 90px;
+  }
+  .member-row {
+    font-size: 11px;
+  }
+}
+
+@media(max-width:620px) {
+  .network-overview {
+    gap: 19px;
+    padding: 17px;
+  }
+  .network-stats>div {
+    padding: 0 10px;
+  }
+  .network-stats>div:first-child {
+    border: 0;
+    padding-left: 0;
+  }
+  .network-stats>div:last-child {
+    padding-right: 0;
+  }
+  .network-stats span {
+    font-size: 10px;
+  }
+  .network-stats b {
+    font-size: 26px;
+  }
+  .member-row {
+    grid-template-columns: minmax(0,1.2fr) minmax(0,1fr) 15px;
+    grid-template-areas: 'identity identity arrow' 'role account arrow' 'parent kyc arrow';
+    gap: 6px 10px;
+    padding: 14px 4px;
+  }
+  .member-toolbar .table-search {
+    flex-basis: 100%;
+  }
+  .member-toolbar select {
+    flex: 1;
+    min-width: 0;
+    font-size: 10.5px;
+    padding: 9px 5px;
+  }
+  .member-avatar {
+    width: 36px;
+    height: 36px;
+  }
+  .member-directory {
+    padding: 15px;
+  }
+}
+
+.members-page .page-heading {
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.member-page-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.create-user-btn {
+  padding-inline: 18px;
+  min-height: 44px;
+  box-shadow: 0 5px 14px #14203918;
+}
+
+.members-page .network-overview {
+  padding: 17px 24px;
+  margin-bottom: 16px;
+  background: linear-gradient(115deg,#fff 10%,#f4f6fa 100%);
+  gap: 16px;
+}
+
+.members-page .network-intro h2 {
+  font-size: 21px;
+  margin: 3px 0 4px;
+}
+
+.members-page .network-stats b {
+  font-size: 27px;
+}
+
+.members-page .network-stats>div {
+  gap: 3px;
+}
+
+.members-page .member-directory {
+  padding: 20px 24px;
+}
+
+.members-page .member-directory .section-title {
+  margin-bottom: 12px;
+}
+
+.member-row {
+  position: relative;
+  border-radius: 9px;
+  transition: background var(--motion-fast),box-shadow var(--motion-base) var(--ease);
+}
+
+.member-row:hover {
+  background: #f0f4fc;
+  box-shadow: inset 3px 0 0 #718bc9;
+}
+
+.member-avatar {
+  transition: background var(--motion-fast),color var(--motion-fast),transform var(--motion-base) var(--ease);
+}
+
+.member-row:hover .member-avatar {
+  background: #dbe5fa;
+  color: #254482;
+  transform: scale(1.07);
+}
+
+.member-row:hover .member-open {
+  transform: translateX(5px);
+  color: var(--blue);
+}
+
+.member-row:active {
+  background: #e8edf7;
+}
+
+.member-open {
+  transition: transform var(--motion-base) var(--ease),color var(--motion-fast);
+}
+
+.member-row {
+  animation-duration: .27s;
+}
+
+@media(max-width:1020px) {
+  .members-page .network-overview {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+@media(max-width:620px) {
+  .members-page .page-heading {
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .member-page-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .members-page .network-overview {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 15px;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .members-page .member-directory {
+    padding: 14px;
+  }
+  .members-page .network-intro h2 {
+    font-size: 19px;
+  }
+  .members-page .network-stats b {
+    font-size: 23px;
+  }
+}
+
+.member-row {
+  transition: background-color var(--motion-hover) ease,color var(--motion-hover) ease,border-color var(--motion-hover) ease,box-shadow var(--motion-settle) var(--ease-out),transform var(--motion-settle) var(--ease-out);
+}
+
+.member-avatar {
+  transform: none!important;
+}
+
+.member-row .member-open {
+  transition: transform 240ms var(--ease-out),color 180ms ease;
+}
+
+@media(hover:hover) and (pointer:fine) {
+  .member-row:hover .member-open {
+    transform: translateX(3px);
+    color: #3853a4;
+  }
+  .member-row:hover {
+    background: #f1f5fc;
+    box-shadow: inset 2px 0 0 #718bc9;
+  }
+}
+
+@media(hover:none),(pointer:coarse) {
+  .member-row:hover {
+    transform: none!important;
+  }
+}
+
+@media(hover:none),(pointer:coarse) {
+  .member-row:hover:not(:active):not(:focus-visible) {
+    background: transparent;
+    box-shadow: none;
+  }
+  .member-row:hover .member-open {
+    transform: none;
+  }
+  .member-row:active {
+    background: #edf2fa;
+  }
+}

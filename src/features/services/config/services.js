@@ -1,0 +1,1 @@
+export const serviceList = [{ name: 'Payout', desc: 'Send to a bank account', icon: 'arrowup', action: 'payout' }, { name: 'Add money', desc: 'Fund your main wallet', icon: 'plus', action: 'add' }, { name: 'Credit card bill', desc: 'Pay outstanding bills', icon: 'card', action: 'bill' }, { name: 'RuPay UPI', desc: 'Collect and manage funds', icon: 'upi', action: 'upi' }];

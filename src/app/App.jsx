@@ -1,50 +1,141 @@
-import React, { useEffect, useState } from 'react';
-import { Header } from '@shared/layout/Header.jsx';
+import React, { useEffect } from 'react';
 import { Sidebar } from '@shared/layout/Sidebar.jsx';
-import { FinanceDashboardPage } from '@features/finance/pages/FinanceDashboardPage.jsx';
-import { TeamManagementPage } from '@features/team/pages/TeamManagementPage.jsx';
-import { WorkspaceProvider, useWorkspace } from '@features/operations/WorkspaceContext.jsx';
-import { OperationsDashboard } from '@features/operations/pages/OperationsDashboard.jsx';
-import { PaymentPage } from '@features/operations/pages/PaymentPage.jsx';
-import { ReportTable } from '@features/operations/components/ReportTable.jsx';
-import { MembersPage, MemberProfile } from '@features/members/MembersPage.jsx';
-import { SchemesPage, MasterPlaceholder } from '@features/masters/SchemesPage.jsx';
-import { pageIds, pages } from './navigation.js';
-const read = () => { const [id, memberId] = window.location.hash.slice(1).split('/'); return { id: pageIds.includes(id) ? id : 'default', memberId: memberId || '' }; };
-function Shell({ logo, onSignOut }) {
-    const { data } = useWorkspace();
-    const [route, setRoute] = useState(read), [mode, setMode] = useState('admin'), [menuOpen, setMenuOpen] = useState(false), [collapsed, setCollapsed] = useState(false);
-    const page = route.id;
-    const item = pages.find(p => p.id === page);
-    useEffect(() => { const sync = () => setRoute(read()); window.addEventListener('hashchange', sync); return () => window.removeEventListener('hashchange', sync); }, []);
-    useEffect(() => { const esc = e => { if (e.key === 'Escape')
-        setMenuOpen(false); }; window.addEventListener('keydown', esc); return () => window.removeEventListener('keydown', esc); }, []);
-    function navigate(id, memberId = '') { const next = { id, memberId }; setRoute(next); window.location.hash = id + (memberId ? `/${memberId}` : ''); setMenuOpen(false); window.scrollTo({ top: 0 }); }
-    function changeMode(next) { setMode(next); navigate('default'); }
-    const blocked = mode === 'operator' && item.mode === 'admin';
-    let content;
-    if (blocked)
-        content = <OperationsDashboard onNavigate={navigate} mode={mode}/>;
-    else if (page === 'default')
-        content = <OperationsDashboard onNavigate={navigate} mode={mode}/>;
-    else if (page === 'final')
-        content = <FinanceDashboardPage />;
-    else if (page === 'team')
-        content = <TeamManagementPage />;
-    else if (page === 'schemes')
-        content = <SchemesPage />;
-    else if (page.startsWith('master-'))
-        content = <MasterPlaceholder title={item.label}/>;
-    else if (page.startsWith('member-'))
-        content = <MembersPage page={page} onProfile={id => navigate('profile', id)}/>;
-    else if (page === 'profile') {
-        const m = data.members.find(x => x.id === route.memberId);
-        content = <MemberProfile memberId={route.memberId} onBack={() => navigate(m ? pages.find(x => x.label === m.role).id : 'member-0')}/>;
+import { Header } from '@shared/layout/Header.jsx';
+import { Icon } from '@shared/ui/Icon.jsx';
+import { OverviewPage } from '@features/dashboard/pages/OverviewPage.jsx';
+import { WalletsPage } from '@features/wallets/pages/WalletsPage.jsx';
+import { TransactionsPage } from '@features/transactions/pages/TransactionsPage.jsx';
+import { ServicesPage } from '@features/services/pages/ServicesPage.jsx';
+import { MembersPage } from '@features/members/pages/MembersPage.jsx';
+import { MemberProfilePage } from '@features/members/pages/MemberProfilePage.jsx';
+import { useDemoFinance } from '@features/payments/hooks/useDemoFinance.js';
+import { useMembers } from '@features/members/hooks/useMembers.js';
+import { useTransactions } from '@features/transactions/hooks/useTransactions.js';
+import { useWorkspaceLayout } from './hooks/useWorkspaceLayout.js';
+import { useWorkspaceKeyboard } from './hooks/useWorkspaceKeyboard.js';
+import { WorkspaceDrawers } from './components/WorkspaceDrawers.jsx';
+
+/** Composition root: feature hooks own their state; App only coordinates navigation. */
+export function App({ logo }) {
+  const layout = useWorkspaceLayout();
+  const finance = useDemoFinance();
+  const members = useMembers(layout.notify);
+  const transactions = useTransactions(layout.notify);
+  const ui = layout.state;
+  const blocked = () => finance.state.busy || finance.lock.current;
+
+  function open(type, extra) {
+    if (!blocked()) layout.open(type, extra);
+  }
+  function close() {
+    if (!blocked()) {
+      finance.patch({ error: '' });
+      layout.close();
     }
-    else if (page === 'reports' || page.startsWith('statement-'))
-        content = <ReportTable wallet={page === 'reports' ? '' : { 'statement-main': 'Main', 'statement-settlement': 'Settlement', 'statement-upi': 'UPI' }[page]}/>;
-    else
-        content = <PaymentPage page={page} onNavigate={navigate}/>;
-    return <div className={`ops-app ${menuOpen ? 'sidebar-open' : ''} ${collapsed ? 'ops-collapsed' : ''}`}><Sidebar logo={logo} current={page} onNavigate={navigate} mode={mode} onClose={() => setMenuOpen(false)}/><div className="sidebar-backdrop" onClick={() => setMenuOpen(false)}/><Header onMenu={() => window.matchMedia('(min-width:992px)').matches ? setCollapsed(x => !x) : setMenuOpen(x => !x)} onSignOut={onSignOut} mode={mode} onMode={changeMode} onNavigate={navigate} balance={data.wallets.Main}/><div className="app-wrapper"><main className="page-enter" key={`${mode}-${page}-${route.memberId}`}><div className="page-head ops-page-head"><div><h4>{blocked ? 'Dashboard' : item.crumb}</h4><nav aria-label="breadcrumb"><ol className="breadcrumb mb-0"><li className="breadcrumb-item">Home</li><li className="breadcrumb-item active" aria-current="page">{blocked ? 'Dashboard' : item.crumb}</li></ol></nav></div><span className="ops-demo-badge"><span /> Demo environment</span></div>{content}</main><footer className="app-footer"><span>© 2026 NYRO Technologies.</span><span>Demo data · API integration pending</span></footer></div></div>;
+  }
+  function selectRole(role) {
+    if (blocked()) return;
+    members.selectRole(role);
+    layout.patch({ rolesOpen: true });
+    layout.goTo('members');
+  }
+  function memberDetail(member) {
+    if (blocked()) return;
+    members.selectMember(member);
+    layout.goTo('member-profile');
+  }
+  function startCreate() {
+    if (!blocked()) {
+      members.startCreate();
+      open('create-user');
+    }
+  }
+  function createMember(event) {
+    if (members.createMember(event)) layout.goTo('members');
+  }
+  function navigate(route) {
+    if (blocked()) return;
+    if (route === 'members') {
+      selectRole('All');
+      return;
+    }
+    if (['payout', 'add', 'bill', 'upi'].includes(route)) {
+      layout.patch({ mobile: false });
+      if (route === 'payout') {
+        finance.startPayout();
+        open('payout');
+      }
+      else if (route === 'add') {
+        finance.startTopUp();
+        open('add');
+      }
+      else open('unavailable', { unavailable: route });
+      return;
+    }
+    if (!['overview', 'wallets', 'transactions', 'services'].includes(route)) return;
+    transactions.patch({ pageNum: 1 });
+    layout.goTo(route);
+  }
+  function detail(transaction) {
+    open('detail', { selectedTransaction: transaction });
+  }
+  function resetDemo() {
+    if (blocked()) return;
+    finance.reset();
+    members.reset();
+    if (ui.page === 'member-profile') layout.goTo('members'); else close();
+    layout.notify('Demo data reset.');
+  }
+
+  useWorkspaceKeyboard({ drawer: ui.drawer, busy: finance.state.busy, openSearch: () => open('search'), close, closeMobile: () => layout.patch({ mobile: false }) });
+  useEffect(() => {
+    layout.scrollMotion.current?.refresh();
+  }, [ui.page, members.state.memberRole]);
+
+  const walletState = { wallets: finance.state.wallets, transactions: finance.state.transactions, hidden: ui.hidden, range: ui.range };
+  const walletActions = { setState: layout.patch, navigate, detail };
+  const memberActions = { ...members, setState: members.patch, selectRole, memberDetail, startCreate, createMember, close };
+  const paymentActions = { setState: finance.patch, lookup: finance.lookup, submitPayout: finance.submitPayout, submitAdd: finance.submitAdd, close };
+  const transactionState = { ...transactions.state, transactions: finance.state.transactions, hidden: ui.hidden };
+  const transactionActions = { setState: transactions.patch, exportCSV: transactions.exportCSV, detail };
+
+  const pages = {
+    overview: <OverviewPage state={walletState} actions={walletActions} />,
+    wallets: <WalletsPage state={walletState} actions={walletActions} />,
+    transactions: <TransactionsPage state={transactionState} actions={transactionActions} />,
+    services: <ServicesPage state={{}} actions={{ navigate }} />,
+    members: <MembersPage state={members.state} actions={memberActions} />,
+    'member-profile': <MemberProfilePage state={members.state} actions={memberActions} />,
+  };
+
+  return (
+    <div className={`app ${ui.collapsed ? 'compact-app' : ''} ${ui.ambientMotion ? '' : 'ambient-paused'}`}>
+      {ui.mobile && <button
+        className="mobile-scrim"
+        aria-label="Close navigation overlay"
+        onClick={() => layout.patch({ mobile: false })}
+      />}
+      <Sidebar members={members.state.members} logo={logo} collapsed={ui.collapsed} mobile={ui.mobile}
+        page={ui.page} onNav={navigate} onToggle={() => layout.patch({ collapsed: !ui.collapsed })}
+        onClose={() => layout.patch({ mobile: false })} onHelp={() => open('help')}
+        rolesOpen={ui.rolesOpen} role={members.state.memberRole}
+        onRoles={() => layout.patch({ rolesOpen: ui.collapsed ? true : !ui.rolesOpen, collapsed: false })} onRole={selectRole} />
+      <main className="main-workspace">
+        <Header page={ui.page} onMenu={() => layout.patch({ mobile: true, collapsed: false })}
+          onSearch={() => open('search')} onNotify={() => open('notifications')} onProfile={() => open('profile')} />
+        <div key={ui.page} className="page-stage">{pages[ui.page] || pages.overview}</div>
+      </main>
+      <WorkspaceDrawers
+        drawer={ui.drawer}
+        ui={ui}
+        financeState={{ ...finance.state, hidden: ui.hidden }}
+        paymentActions={paymentActions}
+
+        memberState={members.state}
+        memberActions={memberActions}
+        actions={{ setState: layout.patch, close, navigate, resetDemo }}
+      />
+      {ui.toast && <div className="toast" role="status"><Icon name="check" size={18} />{ui.toast}</div>}
+    </div>
+  );
 }
-export function App(props) { return <WorkspaceProvider><Shell {...props}/></WorkspaceProvider>; }

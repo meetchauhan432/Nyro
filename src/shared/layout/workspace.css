@@ -1,0 +1,224 @@
+/* workspace — scoped NYRO styles. */
+
+.app {
+  min-height: 100vh;
+  --current-side: var(--side);
+}
+
+.app.compact-app {
+  --current-side: 80px;
+}
+
+.main-workspace {
+  margin-left: calc(var(--current-side) + 24px);
+  min-width: 0;
+  transition: margin-left .25s var(--ease);
+}
+
+.page-content {
+  max-width: 1530px;
+  margin: 0 auto;
+  padding: 30px 34px 18px;
+  animation: page-in .35s var(--ease) both;
+}
+
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.overline {
+  font-size: 10px;
+  font-weight: 650;
+  color: #65758d;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+
+.overline-line {
+  width: 19px;
+  height: 2px;
+  background: var(--orange);
+  border-radius: 2px;
+}
+
+.page-heading h1 {
+  font-size: clamp(26px,2.6vw,37px);
+  font-weight: 550;
+  letter-spacing: -1.7px;
+  line-height: 1.15;
+  color: #192439;
+}
+
+.page-heading p {
+  font-size: 13px;
+  color: #707b88;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.heading-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 7px;
+  white-space: nowrap;
+  padding-bottom: 2px;
+}
+
+.heading-date {
+  font-size: 11px;
+  color: #818995;
+}
+
+@media(min-width:1600px) {
+  .page-content {
+    padding: 38px 44px 24px;
+  }
+}
+
+@media(max-width:1220px) {
+  .page-content {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media(max-width:1020px) {
+  .heading-date {
+    display: none;
+  }
+  .page-heading h1 {
+    letter-spacing: -1px;
+  }
+}
+
+@media(max-width:820px) {
+  .main-workspace {
+    margin-left: 0;
+  }
+  .page-content {
+    padding: 25px 24px;
+  }
+  .heading-date {
+    display: block;
+  }
+}
+
+@media(max-width:620px) {
+  .page-content {
+    padding: 23px 15px 20px;
+  }
+  .page-heading {
+    align-items: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 19px;
+  }
+  .page-heading h1 {
+    font-size: 29px;
+    letter-spacing: -1.2px;
+  }
+  .page-heading p {
+    font-size: 12px;
+    margin-top: 6px;
+  }
+  .overline {
+    font-size: 9px;
+    letter-spacing: 1.1px;
+    margin-bottom: 7px;
+  }
+  .heading-right {
+    align-items: flex-start;
+  }
+  .heading-date {
+    display: none;
+  }
+}
+
+@media(max-width:360px) {
+  .page-content {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .heading-right {
+    display: none;
+  }
+}
+
+.heading-date {
+  color: #6f7987;
+}
+
+.main-workspace {
+  transition: margin-left .38s var(--ease);
+}
+
+.page-content {
+  animation: none;
+}
+
+.page-stage .page-heading {
+  animation: reveal-up .48s var(--ease) both;
+}
+
+.page-stage .wallet-grid,
+.page-stage .network-overview {
+  animation: reveal-up .62s .04s var(--ease) both;
+}
+
+.page-stage .service-section {
+  animation: reveal-up .60s .12s var(--ease) both;
+}
+
+.page-stage .bottom-grid,
+.page-stage .member-directory,
+.page-stage .transaction-page {
+  animation: reveal-up .62s .20s var(--ease) both;
+}
+
+.page-stage .workspace-footer {
+  animation: fade-in .45s .32s both;
+}
+
+.page-stage .member-directory {
+  animation-delay: .08s;
+}
+
+.page-stage .page-heading {
+  animation-duration: .38s;
+}
+
+.page-stage .network-overview {
+  animation-duration: .44s;
+}
+
+.page-stage .wallet-grid {
+  animation-duration: .48s;
+}
+
+.page-stage .service-section,
+.page-stage .bottom-grid {
+  animation-duration: .48s;
+}
+
+.page-stage .bottom-grid {
+  animation-delay: .10s;
+}
+
+.page-stage .nyro-scroll-reveal {
+  animation: nyro-scroll-arrive 360ms var(--ease-out) both;
+  animation-delay: 0ms;
+}
+
+.app button:focus-visible,
+.app a:focus-visible {
+  outline: 2px solid #3853a4;
+  outline-offset: 3px;
+}

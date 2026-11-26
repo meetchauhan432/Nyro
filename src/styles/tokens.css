@@ -1,0 +1,21 @@
+/* Brand, semantic colors, geometry and shared motion. */
+
+:root {
+  --navy: #142039;
+  --blue: #3853a4;
+  --blue-dark: #293f83;
+  --orange: #e9562a;
+  --bg: #f5f4f0;
+  --surface: #fff;
+  --text: #182337;
+  --muted: #707989;
+  --border: #e8e9e7;
+  --radius: 19px;
+  --side: 246px;
+  --ease: cubic-bezier(.22,1,.36,1);
+  --motion-fast: 180ms;
+  --motion-base: 300ms;
+  --motion-hover: 220ms;
+  --motion-settle: 300ms;
+  --ease-out: cubic-bezier(.2,.8,.2,1);
+}

@@ -1,0 +1,92 @@
+/* Base — NYRO design system. Rules retain local cascade order. */
+
+:root {
+  font-family: Inter,'Segoe UI',system-ui,-apple-system,sans-serif;
+  color: var(--text);
+  font-size: 14px;
+  font-synthesis: none;
+  background: var(--bg);
+  font-weight: 400;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  color: inherit;
+}
+
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #8299e1;
+  outline-offset: 3px;
+}
+
+button {
+  border: 0;
+  background: none;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+svg {
+  flex-shrink: 0;
+}
+
+b,
+strong {
+  font-weight: 600;
+}
+
+select {
+  padding: 10px 12px;
+  border: 1px solid #e1e4e9;
+  background: #fff;
+  border-radius: 9px;
+  color: #48546a;
+  max-width: 100%;
+}
+
+body {
+  background: radial-gradient(ellipse at 90% 0%,#e3e9f44d,transparent 35%),var(--bg);
+}
+
+html {
+  scroll-padding-top: 90px;
+  scrollbar-width: thin;
+  scrollbar-color: #b7c1d1 #f5f4f0;
+}
+
+@media(max-width:820px) {
+  html {
+    scroll-padding-top: 76px;
+  }
+}
