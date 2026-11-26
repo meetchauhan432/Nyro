@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Smartphone, LockKeyhole, ArrowRight } from 'lucide-react';
 import { validateLogin } from '../domain/loginRules.js';
 import { demoCredentials } from '../services/demoAuthService.js';
 
@@ -38,19 +38,20 @@ export function LoginForm({ phase, onSignIn, onClearError }) {
 
   return (
     <form ref={form} onSubmit={submit} autoComplete="off" noValidate>
-      <div className="mb-4">
+      <div className="auth-field">
         <label className="form-label" htmlFor="auth-mobile">Mobile number</label>
-        <input id="auth-mobile" name="mobile" type="tel" inputMode="numeric" autoComplete="off" className={`form-control ${errors.mobile ? 'is-invalid' : ''}`}
+        <div className="auth-input-wrap"><Smartphone className="auth-field-icon" size={18} aria-hidden="true" /><input id="auth-mobile" name="mobile" type="tel" inputMode="numeric" autoComplete="off" className={`form-control ${errors.mobile ? 'is-invalid' : ''}`}
           placeholder="Enter 10-digit number" value={fields.mobile} readOnly={busy} required
           aria-invalid={Boolean(errors.mobile)} aria-describedby={errors.mobile ? 'auth-mobile-error' : undefined}
-          onChange={event => updateField('mobile', event.target.value)} />
+          onChange={event => updateField('mobile', event.target.value)} /></div>
         <div aria-live="polite" id="auth-mobile-error">{errors.mobile && <p className="auth-error">{errors.mobile}</p>}</div>
       </div>
-      <div className="mb-4">
+      <div className="auth-field">
         <label className="form-label" htmlFor="auth-password">Password</label>
-        <div className="password-wrapper">
+        <div className="password-wrapper auth-input-wrap">
+          <LockKeyhole className="auth-field-icon" size={18} aria-hidden="true" />
           <input id="auth-password" name="password" type={visiblePassword ? 'text' : 'password'} autoComplete="off" className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-            placeholder="********" value={fields.password} readOnly={busy} required
+            placeholder="Enter your password" value={fields.password} readOnly={busy} required
             aria-invalid={Boolean(errors.password)} aria-describedby={errors.password ? 'auth-password-error' : undefined}
             onChange={event => updateField('password', event.target.value)} />
           <button type="button" className="toggle-password" aria-controls="auth-password" aria-pressed={visiblePassword}
@@ -60,7 +61,7 @@ export function LoginForm({ phase, onSignIn, onClearError }) {
         </div>
         <div aria-live="polite" id="auth-password-error">{errors.password && <p className="auth-error">{errors.password}</p>}</div>
       </div>
-      <div className="d-flex justify-content-between mb-4">
+      <div className="auth-form-options">
         <div className="form-check mb-0">
           <input className="form-check-input" type="checkbox" id="rememberMe" checked={fields.remember} disabled={busy}
             onChange={event => updateField('remember', event.target.checked)} />
@@ -68,20 +69,20 @@ export function LoginForm({ phase, onSignIn, onClearError }) {
         </div>
         <span className="text-muted text-xs align-self-center">Password reset unavailable</span>
       </div>
-      <button type="submit" className="btn btn-primary w-100 mb-3" disabled={busy}>
-        {busy ? <><span className="spinner-border spinner-border-sm me-2" aria-hidden="true" />Signing in…</> : 'Login'}
+      <button type="submit" className="btn btn-primary w-100 auth-submit" disabled={busy}>
+        {busy ? <><span className="spinner-border spinner-border-sm me-2" aria-hidden="true" />Signing in…</> : <><span>Login</span><ArrowRight className="auth-submit-arrow" size={19} aria-hidden="true" /></>}
       </button>
       <div role="status" className="auth-live-status">
         {busy && <span className="visually-hidden">Checking demo credentials.</span>}
         {phase === 'invalid' && <p className="auth-error text-center">Incorrect demo credentials. Try again or use the demo details below.</p>}
       </div>
-      <p className="mb-4 text-center text-muted">Don’t have an account? <span className="auth-inert-link">Sign Up here</span></p>
+      <p className="mb-4 text-center text-muted">Don’t have an account? <span className="auth-inert-link">Sign up unavailable</span></p>
       <div className="border-bottom position-relative my-4 text-center">
         <span className="px-3 position-absolute translate-middle top-50 start-50 bg-body text-muted text-nowrap">Or Continue With</span>
       </div>
       <button type="button" className="btn btn-light w-100 mb-3" disabled title="Not available in demo mode">Login with Google</button>
       <div className="auth-demo">
-        <div><div className="fw-semibold text-body-emphasis">Demo access</div><div className="text-xs">Use fictional credentials only.</div></div>
+        <div><div className="auth-demo-label">Demo access</div><div className="text-xs">Use fictional credentials only.</div></div>
         <button type="button" className="btn btn-soft btn-sm" onClick={fillDemo} disabled={busy}>Use demo details</button>
       </div>
     </form>

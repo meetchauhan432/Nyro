@@ -105,11 +105,11 @@ export function OtpModal({ phase, maskedMobile, error, onSubmit, onResend, onCan
               <path className="auth-otp-success-check" d="m20 33 8 8 16-18" pathLength="1" />
             </svg>
           ) : (
-            <span className="auth-otp-icon"><ShieldCheck size={24} /></span>
+            <span className="auth-otp-icon"><ShieldCheck size={28} /></span>
           )}
-          <h2 id="auth-otp-heading">{verified ? 'Code verified' : 'Verify it’s you'}</h2>
+          <h2 id="auth-otp-heading">{verified ? 'Code verified' : 'Verify your identity'}</h2>
           <p id="auth-otp-description" aria-live="polite">
-            {verified ? 'Opening your workspace.' : `Code sent to ${maskedMobile}`}
+            {verified ? 'Opening your workspace.' : `Demo verification for ${maskedMobile}`}
           </p>
         </header>
         {!verified && (
@@ -118,11 +118,12 @@ export function OtpModal({ phase, maskedMobile, error, onSubmit, onResend, onCan
               event.preventDefault();
               if (canSubmit && complete) onSubmit(digits.join(''));
             }}>
+              <p className="auth-otp-instruction">Enter the six-digit demo verification code.</p>
               <OtpInput digits={digits} inputRefs={inputRefs} onChange={updateDigits} readOnly={!canSubmit} invalid={invalid} />
               <div className="auth-otp-status" id="auth-otp-status" role="status" aria-live="polite">
                 {status || (error && <p className="auth-error">{error}</p>)}
               </div>
-              <button className="btn btn-primary w-100" type="submit" disabled={!canSubmit || !complete}
+              <button className="btn btn-primary w-100 auth-submit" type="submit" disabled={!canSubmit || !complete}
                 aria-busy={phase === 'verifying' || undefined}>{phase === 'verifying' ? 'Verifying…' : 'Verify'}</button>
             </form>
             <div className="auth-otp-actions">

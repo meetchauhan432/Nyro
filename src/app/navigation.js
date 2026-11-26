@@ -1,7 +1,5 @@
-export const pages = [
-  { id: 'default', label: 'Default Dashboard', group: 'Dashboards', crumb: 'Dashboard' },
-  { id: 'final', label: 'Final Dashboard', group: 'Dashboards', crumb: 'Finance' },
-  { id: 'team', label: 'Team Management', group: 'Management', crumb: 'Team Management' },
-];
-
-export const pageIds = pages.map(page => page.id);
+import { roles } from '../features/operations/domain/demoWorkspace.js';
+const p = (id, label, group, crumb = label, mode = 'both') => ({ id, label, group, crumb, mode });
+export const pages = [p('default', 'Dashboard', 'Overview'), p('final', 'Finance Dashboard', 'Overview'), p('team', 'Team Management', 'Overview', 'Team Management', 'admin'), p('schemes', 'Scheme Manager', 'Master', 'Scheme Manager', 'admin'), ...['API Manager', 'SMS Master', 'Bank Account', 'Provider Master', 'Portal Master', 'Service Manager', 'Slider Master', 'Settlement T1'].map((label, i) => p(`master-${i}`, label, 'Master', label, 'admin')), ...roles.map((role, i) => p(`member-${i}`, role, 'Members', role, 'admin')), p('profile', 'Member Profile', 'Hidden', 'Member Profile', 'admin'), p('add-money', 'Add Money', 'Fund'), p('payout', 'Payout', 'Services'), p('credit-card', 'Credit Card', 'Services'), p('upi', 'Rupay UPI', 'Services'), p('reports', 'All Transaction Report', 'Transaction Report'), p('statement-main', 'Main Wallet', 'Account Statement', 'Main Wallet Statement'), p('statement-settlement', 'Settlement Wallet', 'Account Statement', 'Settlement Wallet Statement'), p('statement-upi', 'UPI Wallet', 'Account Statement', 'UPI Wallet Statement')];
+export const pageIds = pages.map(p => p.id);
+export const visiblePages = mode => pages.filter(p => p.group !== 'Hidden' && (p.mode === 'both' || p.mode === mode));

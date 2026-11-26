@@ -1,6 +1,6 @@
-# NYRO Workspace — NexLink UI (V8)
+# NYRO Workspace — NexLink-inspired UI — NYRO login refinement
 
-React 18 + Vite 6. The UI follows the NexLink Bootstrap 5 admin template; the login → OTP → workspace flow is unchanged. All data is fictional.
+React 18 + Vite 6. The UI follows the NexLink Bootstrap 5 admin template; the login → OTP → workspace flow is preserved, with an original NYRO ribbon hero and responsive verification dialog. All data is fictional.
 
 ## Run
 
@@ -25,6 +25,7 @@ Demo login: mobile `9000000000`, password `NyroDemo!` (use the "Use demo details
 
 ## Notes
 
-- The NexLink theme stylesheet, icon fonts, logo, and login background image were not supplied, so colours, spacing and fonts are approximated (Bootstrap 5.3 + custom tokens, Inter font, Lucide icons, ApexCharts via `react-apexcharts`). To match pixel-for-pixel, port the template's `styles.css` into `src/styles/` and swap `public/` assets.
+- The workspace uses independently implemented NexLink-inspired patterns (Bootstrap 5.3 + custom tokens, Lucide icons and ApexCharts). The login artwork is original and the login logo is cropped from the supplied NYRO logo. Confirm appropriate licensing before incorporating any proprietary template assets or code.
 - "Sign up" and "Login with Google" are shown but inactive (no such flow exists in the demo).
+- Authentication refinement and verification: `DEVELOPMENT_PROGRESS.md`.
 - Laravel handoff notes: `docs/LARAVEL_INTEGRATION.md`.
